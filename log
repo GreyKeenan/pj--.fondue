@@ -1,0 +1,47 @@
+
+filled out README
+
+created makefile
+created main.c
+
+grabbed utils/err, originally from pj.sublime.c
+
+utils/endian
+	check endian-ness of system
+	flip endian-ness of sequence of bytes
+
+	used to work with PNG standard's big-endianness
+
+utils/png
+	(may move to utils/files/png)
+
+	code for interpreting pngs, regardless of use case
+		(use case is fondue for this repo)
+
+	identify PNG by header
+	read chunk's headers
+	read IHDR chunk
+	grab data from IDAT chunk (dont process yet)
+	
+	uses utils/endian
+	uses utils/err
+
+main.c
+	fondue's main c file
+
+	uses utils/png
+
+	2 parts:
+		cli tool to create custom font files
+			starting with png -> font file conversion
+		way to use those font files in tandem with displaying graphics, like SDL2
+			created for use with pj.sublime.c
+
+
+General:
+	point of this was I didnt want to use SDL_TTF because adding more libraries is annoying
+	I could have tried to write a TTF file decoder instead, but I wanted to make my own for fun
+	Now, am trying to understand PNG format so can decode it properly to create my font from a png.
+		a bit of a diversion since I could just make a dumb txt/char interpreter or something but idk understanding pngs is interesting
+
+		plus, understanding pngs may make it easier to use them with SDL w/o SDL_Image if I want
