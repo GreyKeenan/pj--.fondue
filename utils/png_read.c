@@ -121,13 +121,12 @@ PNG PNG_read_confirmed(FILE *f) {
 	PNG self = {0};
 	self.ihdr = PNG_Chunk_IHDR_read(f);
 
-	PNG_ChunkHeader chunk = PNG_ChunkHeader_read(f);
+	PNG_ChunkHeader chunk = {0};
 
-	while (!PNG_ChunkHeader_compareType_string(chunk, "IEND")) {
+	while (!PNG_ChunkHeader_compareType_string((chunk = PNG_ChunkHeader_read(f)), "IEND")) {
 		if (!_isCapitalized(chunk.type[0])) {
 			printf("Skipping ancillary chunk.\n");
 			_eat(f, chunk.length + _CHUNKCRC_SIZE);
-			chunk = PNG_ChunkHeader_read(f);
 			continue;
 		}
 		if (PNG_ChunkHeader_compareType_string(chunk, "IDAT")) {
@@ -136,16 +135,19 @@ PNG PNG_read_confirmed(FILE *f) {
 				Err_panic("Unable to read IDAT data.");
 			}
 			_eat_CRC(f);
-			chunk = PNG_ChunkHeader_read(f);
 			continue;
 		} 
 		if (PNG_ChunkHeader_compareType_string(chunk, "PLTE")) {
-			Err_panic("Help I dont know how the palettes work yet ahhhhh!");
+			self.palette = malloc(chunk.length);
+			if (fread(self.palette, 1, chunk.length, f) != chunk.length) {
+				Err_panic("Unable to read PLTE data.");
+			}
+			_eat_CRC(f);
+			continue;
 		}
 
 		_eat(f, chunk.length + _CHUNKCRC_SIZE); //TODO TEMP
 		
-		chunk = PNG_ChunkHeader_read(f);
 	}
 
 	return self;

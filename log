@@ -1,10 +1,12 @@
 
-added -iquote to main
+tweaked PNG_read
+	neater chunkHeader reading
+	doesnt panic at PLTE
 
-split utils/png into separate files
-	_structs
-	_read
-	_interpret (future)
+added macro constants for IHDR values in png_structs
 
-	png.h includes all of them
-	no longer need png.c
+skeleton of PNG_interpret
+	dechunk
+	decompress
+	defilter
+	getReferenceImage
