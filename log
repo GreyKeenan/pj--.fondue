@@ -1,12 +1,15 @@
 
-tweaked PNG_read
-	neater chunkHeader reading
-	doesnt panic at PLTE
+removed png_interpret -> dechunk
+	I'm dumb. The chunking process described is what creates the final chunks, like IHDR etc
+	I thought it meant the IDAT was also split into chunks internally somehow.
 
-added macro constants for IHDR values in png_structs
+added PNG_ReferenceImage struct
+	to store the output of getReferenceImage (renamed)
+	not 'true' reference image described in PNG standard, since may be indexed still
 
-skeleton of PNG_interpret
-	dechunk
-	decompress
-	defilter
-	getReferenceImage
+PNG_read
+	_isCapitalized -> _isLowercase
+		checks 5th bit (32) as per PNG specification
+
+error checks in PNG_read
+	checks for multiple IDAT chunks. panics if true. Add later: just concatenate them together? potentially a lot of memory.

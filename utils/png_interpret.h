@@ -2,17 +2,22 @@
 #define PNG_INTERPRET_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "png_structs.h"
 
-uint8_t *PNG_dechunk(PNG png, uint32_t *outLength);
-uint8_t *PNG_decompress(uint32_t *outLength, uint8_t *dechunkedImage, uint32_t length);
-	//also dechunks image
+typedef struct PNG_ReferenceImage {
+	uint8_t *data;
+	uint32_t width, height, length;
+	uint8_t bitDepth;
+	bool isIndexed;
+	//alpha?
+} PNG_ReferenceImage;
+
+uint8_t *PNG_decompress(PNG png, uint32_t *outLength);
 void PNG_defilter(PNG png, uint8_t *decompressedImage, uint32_t length);
-	//modifies in-place
-uint8_t *PNG_getReferenceImage(PNG png);
-	//initially, panic at interlacedMethod != 0
+	//modifies in-place i think?
+PNG_ReferenceImage PNG_ReferenceImage_get(PNG png);
 	//does process of dechunk, decompress & defilter
-	// to be true 'reference image' as in PNG spec, have to de-index here. Dont necessarily want to de-index though
 
 #endif

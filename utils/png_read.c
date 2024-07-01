@@ -19,8 +19,8 @@ void _eat(FILE *f, int bytes) {
 	}
 }
 #define _eat_CRC(f) _eat(f, _CHUNKCRC_SIZE)
-static inline bool _isCapitalized(char c) {
-	return 'A' <= c && c <= 'Z';
+static inline bool _isLowercase(char c) {
+	return c & 32;
 }
 
 typedef struct _Header {
@@ -124,12 +124,15 @@ PNG PNG_read_confirmed(FILE *f) {
 	PNG_ChunkHeader chunk = {0};
 
 	while (!PNG_ChunkHeader_compareType_string((chunk = PNG_ChunkHeader_read(f)), "IEND")) {
-		if (!_isCapitalized(chunk.type[0])) {
+		if (_isLowercase(chunk.type[0])) {
 			printf("Skipping ancillary chunk.\n");
 			_eat(f, chunk.length + _CHUNKCRC_SIZE);
 			continue;
 		}
 		if (PNG_ChunkHeader_compareType_string(chunk, "IDAT")) {
+			if (self.idata != NULL) {
+				Err_panic("Multi-IDAT-chunk pngs not yet supported."); //TODO
+			}
 			self.idata = malloc(chunk.length);
 			if (fread(self.idata, 1, chunk.length, f) != chunk.length) {
 				Err_panic("Unable to read IDAT data.");
