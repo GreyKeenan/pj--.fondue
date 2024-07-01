@@ -1,17 +1,17 @@
 
-#include "png.h"
+#include "png_read.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
-#include "err.h"
-#include "endian.h"
+#include "utils/err.h"
+#include "utils/endian.h"
 
-//https://www.w3.org/TR/png/
+#include "png_structs.h"
 
 #define _HEADER_SIZE 8
 #define _CHUNKHEADER_SIZE 8
 #define _CHUNKCRC_SIZE 4
+
 
 void _eat(FILE *f, int bytes) {
 	for (int i = 0; i < bytes; ++i) {
@@ -162,3 +162,4 @@ void PNG_free(PNG *self) {
 		self->paletteLength = 0;
 	}
 }
+

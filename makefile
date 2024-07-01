@@ -1,6 +1,7 @@
 
 default:
 	gcc -o fondue_convert \
+		-iquote . \
 		main.c \
 		utils/*.c
 
