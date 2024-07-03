@@ -19,5 +19,6 @@ void PNG_defilter(PNG png, uint8_t *decompressedImage, uint32_t length);
 	//modifies in-place i think?
 PNG_ReferenceImage PNG_ReferenceImage_get(PNG png);
 	//does process of dechunk, decompress & defilter
+void PNG_ReferenceImage_destroy(PNG_ReferenceImage *self);
 
 #endif

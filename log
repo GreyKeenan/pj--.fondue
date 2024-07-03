@@ -1,15 +1,13 @@
 
-removed png_interpret -> dechunk
-	I'm dumb. The chunking process described is what creates the final chunks, like IHDR etc
-	I thought it meant the IDAT was also split into chunks internally somehow.
+* I read up on zlib, DEFLATE, huffman coding, and lz77. See GreyKeenan/le.DEFLATE
 
-added PNG_ReferenceImage struct
-	to store the output of getReferenceImage (renamed)
-	not 'true' reference image described in PNG standard, since may be indexed still
+	after doing so, I dont think that this fondue sub-project is really necessary at all. a custom font-file would just be less effective than using a PNG, plus the font should be packed together in a sprite sheet with other images.
+		I dont really need a separate tool to encode them somehow, because now that I know how PNG encoding works, I can achieve what I would have wanted, if not more, just through an image editor & image-magick
+	the decoding-for-the-sake-of-rendering-with-SDL part is still needed, but that doesn't need to be in its own repo.
+	it will be modular, but if other independent utilities and stuff are just included within pj.sublime.c anyways, this one should be too
+	
+	plan to update master w/ this info (not that it really matters) and move to ar.fondue
 
-PNG_read
-	_isCapitalized -> _isLowercase
-		checks 5th bit (32) as per PNG specification
+	
 
-error checks in PNG_read
-	checks for multiple IDAT chunks. panics if true. Add later: just concatenate them together? potentially a lot of memory.
+	I will still be reusing/reworking some of the PNG-decoding code from this repo in pj.sublime.c
